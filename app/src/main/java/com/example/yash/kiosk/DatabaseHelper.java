@@ -26,6 +26,14 @@ public class DatabaseHelper  extends SQLiteOpenHelper{
     public static final String COL_5 = "time";
     public static final String COL_6 = "eno";
     public static final String COL_7 = "status";
+    public static final String TABLE_NAME2 = "time_table";
+    public static final String COL_8 = "batch";
+    public static final String COL_9 = "day";
+    public static final String COL_10 = "sub";
+    public static final String COL_11 = "time";
+    public static final String COL_12 = "type";
+    public static final String COL_13 = "venue";
+
 
 
 
@@ -42,6 +50,7 @@ public class DatabaseHelper  extends SQLiteOpenHelper{
     public void onCreate(SQLiteDatabase db) {
 
         db.execSQL("create table " + TABLE_NAME + "(batch String ,eno String Primary Key,name String )");
+        db.execSQL("create table " + TABLE_NAME2 + "(batch String ,day String,sub String,time String,type String,venue String )");
 
     }
 
@@ -69,6 +78,30 @@ public class DatabaseHelper  extends SQLiteOpenHelper{
 
         //    System.out.println("Hii" + cursor.getCount());
         db.insert(TABLE_NAME, null, contentValues);
+        //   cursor.close();
+        //}
+
+
+    }
+
+    public void insertt(String batch, String day, String sub,String time,String type,String venue) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COL_8, batch);
+        contentValues.put(COL_9, day);
+        contentValues.put(COL_10, sub);
+        contentValues.put(COL_11, time);
+        contentValues.put(COL_12, type);
+        contentValues.put(COL_13, venue);
+
+     //   final Cursor cursor = db.rawQuery("SELECT eno FROM student_table  ", null);
+
+
+        //  if (cursor.getCount() == 0) {
+
+        //    System.out.println("Hii" + cursor.getCount());
+        db.insert(TABLE_NAME2, null, contentValues);
         //   cursor.close();
         //}
 

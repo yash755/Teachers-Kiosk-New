@@ -5,7 +5,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 
-
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
@@ -13,6 +12,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.protocol.HTTP;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -21,70 +21,55 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-
-public class ServerRequest {
+public class TimeTableFetch {
 
     ProgressDialog progressDialog;
 
-    public ServerRequest(Context context){
+    public TimeTableFetch(Context context){
+
 
         progressDialog = new ProgressDialog(context);
         progressDialog.setCancelable(false);
-        progressDialog.setTitle("Working....");
-        progressDialog.setMessage("Please Wait");
+        progressDialog.setTitle("Fetching TimeTable");
+        progressDialog.setMessage("Working...");
 
 
     }
 
 
-
-    public void fetchuserdatainbackground(User user,GetUserCallBack userCallBack){
+    public void fetchuserdatainbackground(User user, AttendanceArray attendanceArray){
         progressDialog.show();
-        new fetchuserdataasynctask(user,userCallBack).execute();
+        new fetchuserdataasynctask(user,attendanceArray).execute();
     }
 
 
-
-    public class fetchuserdataasynctask extends AsyncTask<Void,Void,User> {
-
+    public class fetchuserdataasynctask extends AsyncTask<Void, Void, JSONArray> {
         User user;
-        GetUserCallBack userCallBack;
+        AttendanceArray attendanceArray;
 
-
-
-
-        public fetchuserdataasynctask(User user,GetUserCallBack userCallBack){
+        public fetchuserdataasynctask(User user, AttendanceArray attendanceArray){
 
             this.user = user;
-            this.userCallBack = userCallBack;
-
-
+            this.attendanceArray = attendanceArray;
         }
 
         @Override
-        protected User doInBackground(Void... voids) {
-            HttpClient httpclient = new DefaultHttpClient();
-            HttpPost  httppost = new HttpPost("http://probase.anip.xyz:8080/login_action");
-            User returneduser = null;
+        protected JSONArray doInBackground(Void... params) {
 
-            try{
+            String code = user.teachercode;
+
+            HttpClient httpclient = new DefaultHttpClient();
+            HttpPost httppost = new HttpPost("http://gauravshukla.xyz:4500/timetable/%20" + code  );
+
+            JSONArray jsonArray = null;
+            try {
 
                 JSONObject jsonobj = new JSONObject();
 
                 System.out.println("I am here");
-                jsonobj.put("user", user.user);
-                jsonobj.put("pass", user.password);
-                jsonobj.put("usertype",user.usertype);
-                jsonobj.put("date1",user.date);
-                jsonobj.put("teachercode",user.teachercode);
+                jsonobj.put("teachercode", user.teachercode);
 
-                String pass = (String) jsonobj.get("pass");
-                String teacher =(String)jsonobj.get("teachercode");
-
-                System.out.println(user.teachercode);
-
-
-                StringEntity se = new StringEntity( jsonobj.toString());
+                StringEntity se = new StringEntity(jsonobj.toString());
                 se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
 
 
@@ -96,47 +81,32 @@ public class ServerRequest {
                 ServerRequest.InputStreamToStringExample str = new ServerRequest.InputStreamToStringExample();
                 String responseServer = str.getStringFromInputStream(inputStream);
 
-
                 System.out.println(responseServer);
-
-
                 JSONObject jsonobj1 = new JSONObject(responseServer);
+                jsonArray = jsonobj1.getJSONArray("success");
 
-               if(jsonobj1.length() == 1){
+                return jsonArray;
 
-                    String error = (String) jsonobj1.get("error");
-                    returneduser = new User(error);
-
-                }
-                else {
-
-                    String username = (String) jsonobj1.get("user");
-                    String authkey = (String) jsonobj1.get("authkey");
-                    String success = (String) jsonobj1.get("success");
-                    String usertype = (String) jsonobj1.get("usertype");
-                    System.out.println(username + authkey + success + usertype + pass + teacher);
-
-                   returneduser = new User(username,pass,authkey,success,usertype,teacher);
-
-                //returneduser = new User("13103485","yash&9654195909","shdhddud","yes","s","teacher");
-                }
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
-            return returneduser;
+
+
+            return jsonArray;
         }
 
 
 
         @Override
-        protected void onPostExecute(User returneduser) {
+        protected void onPostExecute(JSONArray jsonArray) {
+
 
             progressDialog.dismiss();
-            userCallBack.done(returneduser);
 
+            attendanceArray.done(jsonArray);
+            super.onPostExecute(jsonArray);
 
-            super.onPostExecute(returneduser);
         }
     }
 
@@ -184,5 +154,11 @@ public class ServerRequest {
         }
 
     }
+
+
+
+
+
+
 
 }

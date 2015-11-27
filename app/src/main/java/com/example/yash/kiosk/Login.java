@@ -10,12 +10,17 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class Login extends AppCompatActivity implements View.OnClickListener{
 
@@ -109,12 +114,11 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
         serverRequest.fetchuserdatainbackground(user, new GetUserCallBack() {
                     @Override
                     public void done(User returneduser) {
-                        if(returneduser.error == null) {
+                        if (returneduser.error == null) {
 
                             loguserin(returneduser);
 
-                        }
-                        else{
+                        } else {
                             System.out.println(returneduser.error);
                             showerrormessage(returneduser.error);
                         }
@@ -126,7 +130,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
     private void showerrormessage(String error){
         AlertDialog.Builder dialogbuilder = new AlertDialog.Builder(Login.this);
         dialogbuilder.setMessage(error);
-        dialogbuilder.setPositiveButton("OKAY",null);
+        dialogbuilder.setPositiveButton("OKAY", null);
         dialogbuilder.show();
     }
 
@@ -135,7 +139,13 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
         userlocalstore.userData(returneduser);
         userlocalstore.setUserloggedIn(true);
 
-        startActivity(new Intent(this, MainActivity.class));
+
+        fetchtimetable();
+
+
+
+
+
 
     }
 
@@ -150,6 +160,62 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
         return !username.getText().toString().trim().equals("") && !password.getText().toString().trim().equals("")
                 && !teachercode.getText().toString().trim().equals("");
     }
+
+
+    private void fetchtimetable(){
+        Userlocalstore userlocalstore;
+        userlocalstore = new Userlocalstore(this);
+        User user = userlocalstore.getloggedInUser();
+        TimeTableFetch timeTableFetch = new TimeTableFetch(this);
+        timeTableFetch.fetchuserdatainbackground(user, new AttendanceArray() {
+            @Override
+            public void done(JSONArray jsonArray) {
+
+
+                if (jsonArray.length() > 0) {
+
+                    inserthere(jsonArray);
+                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+
+
+                } else
+                    Toast.makeText(getApplicationContext(), "Try Later!!!", Toast.LENGTH_SHORT).show();
+
+
+            }
+        });
+
+
+
+
+    }
+
+
+    public void inserthere(JSONArray jsonArray){
+
+        DatabaseHelper teacher_db = new DatabaseHelper(this);
+
+        for (int i = 0; i < jsonArray.length(); i++) {
+
+            try {
+                JSONObject object = jsonArray.getJSONObject(i);
+                String batch = (String) object.get("batch");
+                String day = (String) object.get("day");
+                String sub = (String) object.get("sub");
+                String time = (String) object.get("time");
+                String type = (String) object.get("type");
+                String venue = (String) object.get("venue");
+
+                teacher_db.insertt(batch,day,sub,time,type,venue);
+            } catch (JSONException e) {
+                Log.e("SAMPLE", "error getting result " + i, e);
+            }
+        }
+        Toast.makeText(getApplicationContext(), "TimeTable updated!!!", Toast.LENGTH_SHORT).show();
+        // startActivity(new Intent(this, AttendanceListActivity.class));
+    }
+
+
 
 }
 
