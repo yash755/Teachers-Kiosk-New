@@ -253,5 +253,19 @@ public class DatabaseHelper  extends SQLiteOpenHelper{
 
 
 
+    public Cursor getTT(String day) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+
+
+        final Cursor c = db.rawQuery("SELECT * FROM " + TABLE_NAME2 + " where day = " + "'" + day + "'" + " order by " + COL_11 + " ASC ", null);
+
+        System.out.println("Count" + c.getCount());
+
+        return c;
+
+    }
+
 
 }

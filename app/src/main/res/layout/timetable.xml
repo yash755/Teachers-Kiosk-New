@@ -9,7 +9,7 @@
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:id="@+id/timetable"
+        android:id="@+id/tt"
         android:layout_alignRight="@+id/textView"
         android:layout_alignEnd="@+id/textView" />
 

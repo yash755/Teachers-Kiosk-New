@@ -33,8 +33,8 @@ public class MainActivity extends AppCompatActivity
     ViewPager pager;
     ViewPagerAdapter adapter;
     SlidingTabLayout tabs;
-    CharSequence Titles[]={"Home","Events"};
-    int Numboftabs =2;
+    CharSequence Titles[]={"","Mon","Tue","Wed","Thu","Fri","Sat",""};
+    int Numboftabs =8;
     Button button1;
 
     @Override
@@ -68,6 +68,9 @@ public class MainActivity extends AppCompatActivity
 
         // Setting the ViewPager For the SlidingTabsLayout
         tabs.setViewPager(pager);
+
+
+
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

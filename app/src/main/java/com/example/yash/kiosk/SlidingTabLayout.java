@@ -200,6 +200,7 @@ public class SlidingTabLayout extends HorizontalScrollView {
             String desc = mContentDescriptions.get(i, null);
             if (desc != null) {
                 tabView.setContentDescription(desc);
+
             }
 
             mTabStrip.addView(tabView);
@@ -263,6 +264,14 @@ public class SlidingTabLayout extends HorizontalScrollView {
                 mViewPagerPageChangeListener.onPageScrolled(position, positionOffset,
                         positionOffsetPixels);
             }
+            if (mViewPager.getCurrentItem() == 7) {
+                mViewPager.setCurrentItem(1, false);
+            }
+            if (mViewPager.getCurrentItem() == 0) {
+                mViewPager.setCurrentItem(6, false);
+            }
+
+
         }
 
         @Override
@@ -279,13 +288,20 @@ public class SlidingTabLayout extends HorizontalScrollView {
             if (mScrollState == ViewPager.SCROLL_STATE_IDLE) {
                 mTabStrip.onViewPagerPageChanged(position, 0f);
                 scrollToTab(position, 0);
+
             }
             for (int i = 0; i < mTabStrip.getChildCount(); i++) {
                 mTabStrip.getChildAt(i).setSelected(position == i);
             }
             if (mViewPagerPageChangeListener != null) {
                 mViewPagerPageChangeListener.onPageSelected(position);
+
             }
+
+
+
+
+
         }
 
     }
