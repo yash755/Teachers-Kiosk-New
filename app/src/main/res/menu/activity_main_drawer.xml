@@ -2,14 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:checkableBehavior="single">
+        <item android:id="@+id/show_timetable" android:icon="@android:drawable/ic_menu_slideshow"
+            android:title="Show Time Table" />
         <item android:id="@+id/fetch_data" android:icon="@android:drawable/ic_menu_camera"
             android:title="Fetch Student Data" />
-        <item android:id="@+id/nav_gallery" android:icon="@android:drawable/ic_menu_gallery"
-            android:title="Gallery" />
-        <item android:id="@+id/nav_slideshow" android:icon="@android:drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
-        <item android:id="@+id/nav_manage" android:icon="@android:drawable/ic_menu_manage"
-            android:title="Tools" />
+        <item android:id="@+id/mark_attendance" android:icon="@android:drawable/ic_menu_gallery"
+            android:title="Mark Attendance" />
+        <item android:id="@+id/upload_attendance" android:icon="@android:drawable/ic_menu_manage"
+            android:title="Upload Attendance" />
     </group>
 
     <item android:title="Communicate">

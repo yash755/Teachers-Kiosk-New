@@ -139,13 +139,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
         userlocalstore.userData(returneduser);
         userlocalstore.setUserloggedIn(true);
 
-
         fetchtimetable();
-
-
-
-
-
 
     }
 
@@ -176,20 +170,15 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
 
                     inserthere(jsonArray);
                     startActivity(new Intent(getApplicationContext(), MainActivity.class));
-
+               //     finish();
 
                 } else
                     Toast.makeText(getApplicationContext(), "Try Later!!!", Toast.LENGTH_SHORT).show();
 
-
             }
         });
 
-
-
-
     }
-
 
     public void inserthere(JSONArray jsonArray){
 

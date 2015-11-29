@@ -17,6 +17,7 @@ public class TimeTable extends Fragment {
 
 
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
@@ -46,8 +47,39 @@ public class TimeTable extends Fragment {
         cr.moveToFirst();
         final ArrayList<String> time = new ArrayList<>();
         while (!cr.isAfterLast()) {
-            time.add(cr.getString(cr.getColumnIndex("time")));
-            cr.moveToNext();
+
+            if(cr.getString(cr.getColumnIndex("time")).equals("9") || cr.getString(cr.getColumnIndex("time")).equals("10") || cr.getString(cr.getColumnIndex("time")).equals("11"))
+            {
+                time.add(cr.getString(cr.getColumnIndex("time")) + "AM");
+                cr.moveToNext();
+            }
+
+            else if (cr.getString(cr.getColumnIndex("time")).equals("12"))
+            {
+                time.add(cr.getString(cr.getColumnIndex("time")) + "NOON");
+                cr.moveToNext();
+            }
+            else if (cr.getString(cr.getColumnIndex("time")).equals("13"))
+            {
+                time.add("1PM");
+                cr.moveToNext();
+            }
+            else if (cr.getString(cr.getColumnIndex("time")).equals("14"))
+            {
+                time.add("2PM");
+                cr.moveToNext();
+            }
+            else if (cr.getString(cr.getColumnIndex("time")).equals("15"))
+            {
+                time.add("3PM");
+                cr.moveToNext();
+            }
+            else if (cr.getString(cr.getColumnIndex("time")).equals("14"))
+            {
+                time.add("4PM");
+                cr.moveToNext();
+            }
+
         }
 
         cr.moveToFirst();

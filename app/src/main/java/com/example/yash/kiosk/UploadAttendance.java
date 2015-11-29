@@ -2,111 +2,66 @@ package com.example.yash.kiosk;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.view.ViewPager;
-import android.util.Log;
-import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
-import android.widget.LinearLayout;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
-
-
-    Toolbar toolbar;
-    ViewPager pager;
-    ViewPagerAdapter adapter;
-    SlidingTabLayout tabs;
-    CharSequence Titles[]={"Sat","Mon","Tue","Wed","Thu","Fri","Sat","Mon"};
-    int Numboftabs =8;
-
+public class UploadAttendance extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     Userlocalstore userlocalstore;
+    ListView li;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_upload_attendance);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Upload Attendance");
 
+        DatabaseHelper db = new DatabaseHelper(this);
+        db.getList();
 
-        userlocalstore = new Userlocalstore(this);
+        Cursor cr = db.getTable();
 
-
-
-        // Creating The ViewPagerAdapter and Passing Fragment Manager, Titles fot the Tabs and Number Of Tabs.
-        adapter =  new ViewPagerAdapter(getSupportFragmentManager(),Titles,Numboftabs);
-
-        // Assigning ViewPager View and setting the adapter
-        pager = (ViewPager) findViewById(R.id.pager);
-        pager.setAdapter(adapter);
-
-        // Assiging the Sliding Tab Layout View
-        tabs = (SlidingTabLayout) findViewById(R.id.tabs);
-        tabs.setCustomTabView(R.layout.custom_tab_title, R.id.tabtext);
-        tabs.setDistributeEvenly(true); // To make the Tabs Fixed set this true, This makes the tabs Space Evenly in Available width
-
-        // Setting Custom Color for the Scroll bar indicator of the Tab View
-        tabs.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
-            @Override
-            public int getIndicatorColor(int position) {
-                return getResources().getColor(R.color.tabsScrollColor);
-            }
-        });
-
-        // Setting the ViewPager For the SlidingTabsLayout
-        tabs.setViewPager(pager);
-
-        Calendar calendar = Calendar.getInstance();
-        int day = calendar.get(Calendar.DAY_OF_WEEK);
-
-
-
-      switch (day) {
-            case Calendar.MONDAY:
-                pager.setCurrentItem(1);
-
-            case Calendar.TUESDAY:
-                pager.setCurrentItem(2);
-
-           case Calendar.WEDNESDAY:
-               pager.setCurrentItem(3);
-
-           case Calendar.THURSDAY:
-
-
-           case Calendar.FRIDAY:
-               pager.setCurrentItem(5);
-
-           case Calendar.SATURDAY:
-               pager.setCurrentItem(6);
-
-          case Calendar.SUNDAY:
-              pager.setCurrentItem(1);
+        cr.moveToFirst();
+        final ArrayList<String> list1 = new ArrayList<>();
+        while (!cr.isAfterLast()) {
+            list1.add(cr.getString(cr.getColumnIndex("tbl_name")));
+            cr.moveToNext();
         }
+        cr.close();
+
+        ListAdapter adpt = new AttendanceUpload(this, list1);
+        li = (ListView) findViewById(R.id.ut);
+        li.setAdapter(adpt);
+
 
 
 
@@ -120,6 +75,7 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
     }
 
 
@@ -134,6 +90,7 @@ public class MainActivity extends AppCompatActivity
             super.onBackPressed();
         }
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -163,20 +120,6 @@ public class MainActivity extends AppCompatActivity
 
         return super.onOptionsItemSelected(item);
     }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if(!authenticate())
-            startActivity(new Intent(this,Login.class));
-    }
-
-    private boolean authenticate(){
-        return userlocalstore.getuserloggedIn();
-    }
-
-
-
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -213,7 +156,6 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
 
 
     public void fetch(){
@@ -268,3 +210,4 @@ public class MainActivity extends AppCompatActivity
 
 
 }
+

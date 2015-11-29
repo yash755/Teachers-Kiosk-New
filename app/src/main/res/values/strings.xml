@@ -6,4 +6,7 @@
 
     <string name="action_settings">Settings</string>
     <string name="title_activity_login">Login</string>
+    <string name="title_activity_mark_attendance">MarkAttendance</string>
+    <string name="title_activity_student_list">StudentList</string>
+    <string name="title_activity_upload_attendance">UploadAttendance</string>
 </resources>

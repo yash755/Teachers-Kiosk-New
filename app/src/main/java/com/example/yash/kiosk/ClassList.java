@@ -31,16 +31,22 @@ public class ClassList extends ArrayAdapter<String> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = LayoutInflater.from(getContext());
-        View customView = inflater.inflate(R.layout.classlist, parent, false);
-        TextView t1 = (TextView)customView.findViewById(R.id.classname);
-        TextView t2 = (TextView)customView.findViewById(R.id.time);
-        TextView t3 = (TextView)customView.findViewById(R.id.venue);
+        View customView = null;
 
-        t1.setText(classname.get(position));
-        t2.setText(time.get(position));
-        t3.setText(venue.get(position));
+        if (customView == null) {
+            customView = inflater.inflate(R.layout.classlist, parent, false);
+
+           // View customView = inflater.inflate(R.layout.classlist, parent, false);
+            TextView t1 = (TextView) customView.findViewById(R.id.classname);
+            TextView t2 = (TextView) customView.findViewById(R.id.time);
+            TextView t3 = (TextView) customView.findViewById(R.id.venue);
 
 
+            t1.setText(classname.get(position));
+            t2.setText(time.get(position));
+            t3.setText(venue.get(position));
+
+        }
 
 
         return customView;

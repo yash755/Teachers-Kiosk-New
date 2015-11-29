@@ -59,7 +59,7 @@ public class TimeTableFetch {
             String code = user.teachercode;
 
             HttpClient httpclient = new DefaultHttpClient();
-            HttpPost httppost = new HttpPost("http://gauravshukla.xyz:4500/timetable/%20" + code  );
+            HttpPost httppost = new HttpPost("http://teacherkiosk.gauravshukla.xyz:8080/timetable/" + code  );
 
             JSONArray jsonArray = null;
             try {

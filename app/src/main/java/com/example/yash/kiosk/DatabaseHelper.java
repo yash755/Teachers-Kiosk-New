@@ -113,7 +113,7 @@ public class DatabaseHelper  extends SQLiteOpenHelper{
         System.out.println("I am starting!!!!");
         SQLiteDatabase db = this.getWritableDatabase();
         System.out.println(db);
-        final Cursor c = db.rawQuery("SELECT eno FROM " + TABLE_NAME , null);
+        final Cursor c = db.rawQuery("SELECT * FROM " + TABLE_NAME , null);
         if(c != null)
             System.out.println("I am not here!!!!" + "JJJJJ" + c.getCount());
         return c;
@@ -121,16 +121,7 @@ public class DatabaseHelper  extends SQLiteOpenHelper{
 
     }
 
-    public Cursor getNames() {
-        System.out.println("I am starting!!!!");
-        SQLiteDatabase db = this.getWritableDatabase();
-        System.out.println(db);
-        final Cursor c = db.rawQuery("SELECT name FROM " + TABLE_NAME , null);
-        if(c != null)
-            System.out.println("I am not here!!!!" + "JJJJJ" + c.getCount());
-        return c;
 
-    }
 
     public Cursor getStatus(String enno){
 
@@ -168,6 +159,7 @@ public class DatabaseHelper  extends SQLiteOpenHelper{
             db.update(temptable, values, COL_6+"="+enno, null);
 
             System.out.println("I am yes");
+
 
         } else{
 
