@@ -1,12 +1,15 @@
 package com.example.yash.kiosk;
 
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.ArrayAdapter;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -37,6 +40,11 @@ public class ClassList extends ArrayAdapter<String> {
             customView = inflater.inflate(R.layout.classlist, parent, false);
 
            // View customView = inflater.inflate(R.layout.classlist, parent, false);
+         /*   ProgressBar progressBar = (ProgressBar)customView.findViewById(R.id.progressBar);
+            ObjectAnimator animation = ObjectAnimator.ofInt(progressBar, "progress", 0, 1000); // see this max value coming back here, we animale towards that value
+            animation.setDuration (5000); //in milliseconds
+            animation.setInterpolator (new DecelerateInterpolator());
+            animation.start ();*/
             TextView t1 = (TextView) customView.findViewById(R.id.classname);
             TextView t2 = (TextView) customView.findViewById(R.id.time);
             TextView t3 = (TextView) customView.findViewById(R.id.venue);
