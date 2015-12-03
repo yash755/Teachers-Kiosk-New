@@ -15,9 +15,6 @@ import java.util.ArrayList;
 
 public class TimeTable extends Fragment {
 
-
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
@@ -89,9 +86,6 @@ public class TimeTable extends Fragment {
             cr.moveToNext();
         }
         cr.close();
-
-
-
 
 
 

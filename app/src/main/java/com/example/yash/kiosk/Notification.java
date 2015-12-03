@@ -18,12 +18,16 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -35,6 +39,8 @@ import java.util.ArrayList;
 public class Notification extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener {
 
     Userlocalstore userlocalstore;
+   // EditText message;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,24 +49,55 @@ public class Notification extends AppCompatActivity  implements NavigationView.O
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        EditText message = (EditText) findViewById(R.id.message);
+        message.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                boolean handled = false;
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    // TODO do something
+                    handled = true;
+                }
+                return handled;
+            }
+        });
+
+
+
 
         ArrayList<String> notifylist = new ArrayList<>();
         notifylist.add("B1B2B3");
         notifylist.add("B4B5B6");
 
-        ArrayList<String> names = new ArrayList<>();
-        notifylist.add("");
-        notifylist.add("");
+        ArrayList<String> value = new ArrayList<>();
+        notifylist.add("jh");
+        notifylist.add("jkljl");
 
-        ListAdapter adpt = new Students(this,notifylist, names);
+        ListAdapter adpt = new Notify(this, notifylist,value);
         final ListView li = (ListView) findViewById(R.id.listll);
         li.setAdapter(adpt);
+
+        li.setOnTouchListener(new SwipeDetector());
 
         AdapterView.OnItemClickListener listener = new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int position,
                                     long arg3) {
 
+                if (SwipeDetector.swipeDetected()) {
+
+                    if (SwipeDetector.getAction() == SwipeDetector.Action.LR) {
+                        arg1.setBackgroundColor(Color.YELLOW);
+
+                    }
+                    else if (SwipeDetector.getAction() == SwipeDetector.Action.RL) {
+                        arg1.setBackgroundColor(Color.WHITE);
+
+
+                    }
+                }
+                else
+                    Toast.makeText(Notification.this, "Wrong Press", Toast.LENGTH_SHORT).show();
 
             }
         };
@@ -81,6 +118,8 @@ public class Notification extends AppCompatActivity  implements NavigationView.O
 
 
     }
+
+
 
 
     @Override

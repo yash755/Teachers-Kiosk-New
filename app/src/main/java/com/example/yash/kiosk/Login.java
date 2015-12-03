@@ -3,6 +3,7 @@ package com.example.yash.kiosk;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -11,12 +12,18 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.Selection;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -45,6 +52,24 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
         username = (EditText) findViewById(R.id.username);
         password = (EditText) findViewById(R.id.password);
         teachercode = (EditText)findViewById(R.id.teachercode);
+
+        teachercode.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+
+                if ((actionId==EditorInfo.IME_ACTION_DONE )   )
+                {
+                    //Toast.makeText(getActivity(), "call",45).show();
+                    // hide virtual keyboard
+                    InputMethodManager imm = (InputMethodManager)getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(radiousertype.getWindowToken(), 0);
+                    return true;
+                }
+                return false;
+
+            }
+        });
 
         login = (Button) findViewById(R.id.login);
         radiousertype = (RadioGroup) findViewById(R.id.radiousertype);

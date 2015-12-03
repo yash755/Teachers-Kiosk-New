@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -33,6 +34,9 @@ public class ClassList extends ArrayAdapter<String> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+
+        Integer images[] = {R.drawable.pic1};
+
         LayoutInflater inflater = LayoutInflater.from(getContext());
         View customView = null;
 
@@ -48,11 +52,14 @@ public class ClassList extends ArrayAdapter<String> {
             TextView t1 = (TextView) customView.findViewById(R.id.classname);
             TextView t2 = (TextView) customView.findViewById(R.id.time);
             TextView t3 = (TextView) customView.findViewById(R.id.venue);
+            ImageView imageView = (ImageView) customView.findViewById(R.id.imageDisplay);
+
 
 
             t1.setText(classname.get(position));
             t2.setText(time.get(position));
             t3.setText(venue.get(position));
+            imageView.setImageResource(images[0]);
 
         }
 
