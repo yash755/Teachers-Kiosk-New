@@ -2,7 +2,12 @@ package com.example.yash.kiosk;
 
 
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 
 
@@ -20,6 +25,8 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.SocketTimeoutException;
+import java.util.Date;
 
 
 public class ServerRequest {
@@ -37,10 +44,9 @@ public class ServerRequest {
     }
 
 
-
-    public void fetchuserdatainbackground(User user,GetUserCallBack userCallBack){
+    public void fetchuserdatainbackground(Context context,User user,GetUserCallBack userCallBack){
         progressDialog.show();
-        new fetchuserdataasynctask(user,userCallBack).execute();
+        new fetchuserdataasynctask(context,user,userCallBack).execute();
     }
 
 
@@ -49,14 +55,15 @@ public class ServerRequest {
 
         User user;
         GetUserCallBack userCallBack;
+        Context context;
 
 
 
-
-        public fetchuserdataasynctask(User user,GetUserCallBack userCallBack){
+        public fetchuserdataasynctask(Context context,User user,GetUserCallBack userCallBack){
 
             this.user = user;
             this.userCallBack = userCallBack;
+            this.context = context;
 
 
         }
@@ -66,6 +73,8 @@ public class ServerRequest {
             HttpClient httpclient = new DefaultHttpClient();
             HttpPost  httppost = new HttpPost("http://probase.anip.xyz:8080/login_action");
             User returneduser = null;
+            long requestStratTime = new Date().getTime();
+            long TIME_OUT_IN_SECONDS = 12;
 
             try{
 
@@ -77,7 +86,8 @@ public class ServerRequest {
                 jsonobj.put("usertype",user.usertype);
                 jsonobj.put("date1",user.date);
                 jsonobj.put("teachercode",user.teachercode);
-                jsonobj.put("bypass",true);
+            //    jsonobj.put("bypass",true);
+            //    jsonobj.put("mentorcode","");
 
                 System.out.println(jsonobj.toString());
 
@@ -95,6 +105,19 @@ public class ServerRequest {
 
 
                 HttpResponse response = httpclient.execute(httppost);
+
+                long requestEndTime = new Date().getTime();
+                long timeOfRequest = (requestEndTime - requestStratTime) / 1000;
+
+                if (response == null && timeOfRequest > 20) {
+
+                    String error = "Network Error";
+                    System.out.println("Network Error");
+                    returneduser = new User(error);
+                }
+
+
+       else{
                 InputStream inputStream = response.getEntity().getContent();
                 ServerRequest.InputStreamToStringExample str = new ServerRequest.InputStreamToStringExample();
                 String responseServer = str.getStringFromInputStream(inputStream);
@@ -108,25 +131,30 @@ public class ServerRequest {
                if(jsonobj1.length() == 1){
 
                     String error = (String) jsonobj1.get("error");
-                  // returneduser = new User(error);
-                   returneduser = new User("13103485","yash&9654195909","shdhddud","yes","s","SAN");
+                    returneduser = new User(error);
+                  // returneduser = new User("13103485","yash&9654195909","shdhddud","yes","s","SAN");
 
                 }
                 else {
 
-                    String username = (String) jsonobj1.get("user");
-                    String authkey = (String) jsonobj1.get("authkey");
-                    String success = (String) jsonobj1.get("success");
-                    String usertype = (String) jsonobj1.get("usertype");
-                    System.out.println(username + authkey + success + usertype + pass + teacher);
+                   String username = (String) jsonobj1.get("user");
+                   String authkey = (String) jsonobj1.get("authkey");
+                   String success = (String) jsonobj1.get("success");
+                   String usertype = (String) jsonobj1.get("usertype");
+                   System.out.println(username + authkey + success + usertype + pass + teacher);
 
-                   returneduser = new User(username,pass,authkey,success,usertype,teacher);
+                   returneduser = new User(username, pass,"2", success, usertype, teacher);
 
-                //returneduser = new User("13103485","yash&9654195909","shdhddud","yes","s","teacher");
-                }
-            }catch (Exception e){
+                   //returneduser = new User("13103485","yash&9654195909","shdhddud","yes","s","teacher");
+               }
+               }
+            }
+
+
+            catch (Exception e){
                 e.printStackTrace();
             }
+
 
             return returneduser;
         }
@@ -135,6 +163,7 @@ public class ServerRequest {
 
         @Override
         protected void onPostExecute(User returneduser) {
+
 
             progressDialog.dismiss();
             userCallBack.done(returneduser);

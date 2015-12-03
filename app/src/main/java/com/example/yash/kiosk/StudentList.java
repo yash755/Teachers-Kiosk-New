@@ -77,25 +77,42 @@ public class StudentList extends AppCompatActivity {
             public void onItemClick(AdapterView<?> arg0, View arg1, int position,
                                     long arg3) {
 
+                Cursor cr = db.vfetch();
+                cr.moveToFirst();
+                String tags = null;
+
+                while (!cr.isAfterLast()) {
+                    tags = cr.getString(cr.getColumnIndex("vstatus")).toString();
+                    cr.moveToNext();
+                }
+
+                System.out.println(tags);
+                cr.close();
+
                 if (SwipeDetector.swipeDetected()) {
 
                     if (SwipeDetector.getAction() == SwipeDetector.Action.RL) {
-                        arg1.setBackgroundColor(Color.RED);
+                        arg1.setBackgroundColor(Color.parseColor("#FFFFA654"));
                        db.onAttendanceInsert(enno.get(position), "a");
 
-                        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-                        v.vibrate(400);
+
+                        if(tags.equals("1")) {
+                            Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                            v.vibrate(400);
+                        }
 
 
 
                     } else if (SwipeDetector.getAction() == SwipeDetector.Action.LR) {
 
 
-                        arg1.setBackgroundColor(Color.BLUE);
+                        arg1.setBackgroundColor(Color.parseColor("#87CEFA"));
                         db.onAttendanceInsert(enno.get(position), "p");
 
-                        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-                        v.vibrate(100);
+                        if(tags.equals("1")) {
+                            Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                            v.vibrate(100);
+                        }
 
 
                     }

@@ -39,9 +39,9 @@ public class ClassList extends ArrayAdapter<String> {
         if (customView == null) {
             customView = inflater.inflate(R.layout.classlist, parent, false);
 
-           // View customView = inflater.inflate(R.layout.classlist, parent, false);
-         /*   ProgressBar progressBar = (ProgressBar)customView.findViewById(R.id.progressBar);
-            ObjectAnimator animation = ObjectAnimator.ofInt(progressBar, "progress", 0, 1000); // see this max value coming back here, we animale towards that value
+           //View customView = inflater.inflate(R.layout.classlist, parent, false);
+       /*     ProgressBar progressBar = (ProgressBar)customView.findViewById(R.id.progressBar);
+            ObjectAnimator animation = ObjectAnimator.ofInt(progressBar, "progress", 0, 999); // see this max value coming back here, we animale towards that value
             animation.setDuration (5000); //in milliseconds
             animation.setInterpolator (new DecelerateInterpolator());
             animation.start ();*/

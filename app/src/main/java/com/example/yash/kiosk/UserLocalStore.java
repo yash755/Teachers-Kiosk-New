@@ -16,6 +16,7 @@ class Userlocalstore{
     public void userData(User user)
     {
         SharedPreferences.Editor speditor = userLocalDatabase.edit();
+        System.out.println("Authkey" + user.authkey);
         speditor.putString("authkey",user.authkey);
         speditor.putString("usertype",user.usertype);
         speditor.putString("password",user.password);
@@ -24,6 +25,7 @@ class Userlocalstore{
         speditor.commit();
     }
 
+
     public User getloggedInUser(){
         String name = userLocalDatabase.getString("user", "");
         String usertype = userLocalDatabase.getString("usertype","");
@@ -31,7 +33,8 @@ class Userlocalstore{
         String password = userLocalDatabase.getString("password","");
         String teacher  = userLocalDatabase.getString("teachercode","");
 
-        User storedUser = new User(name,password,usertype,authkey,teacher);
+        System.out.println("author" + authkey);
+        User storedUser = new User(name,password,usertype,authkey,teacher,"test","test2");
         return storedUser;
 
     }

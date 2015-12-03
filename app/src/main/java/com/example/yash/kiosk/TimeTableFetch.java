@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -59,29 +60,30 @@ public class TimeTableFetch {
             String code = user.teachercode;
 
             HttpClient httpclient = new DefaultHttpClient();
-            HttpPost httppost = new HttpPost("http://teacherkiosk.gauravshukla.xyz:8080/timetable/" + code  );
+            HttpGet httppost = new HttpGet("http://teacherkiosk.gauravshukla.xyz:8080/timetable/" + code  );
 
             JSONArray jsonArray = null;
             try {
+
 
                 JSONObject jsonobj = new JSONObject();
 
                 System.out.println("I am here");
                 jsonobj.put("teachercode", user.teachercode);
 
-                StringEntity se = new StringEntity(jsonobj.toString());
-                se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
+               // StringEntity se = new StringEntity(jsonobj.toString());
+               // se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
 
 
-                httppost.setEntity(se);
+             //   httppost.setEntity(se);
 
 
                 HttpResponse response = httpclient.execute(httppost);
                 InputStream inputStream = response.getEntity().getContent();
-                ServerRequest.InputStreamToStringExample str = new ServerRequest.InputStreamToStringExample();
+                TimeTableFetch.InputStreamToStringExample str = new TimeTableFetch.InputStreamToStringExample();
                 String responseServer = str.getStringFromInputStream(inputStream);
 
-                System.out.println(responseServer);
+                System.out.println(responseServer + "yuy");
                 JSONObject jsonobj1 = new JSONObject(responseServer);
                 jsonArray = jsonobj1.getJSONArray("success");
 

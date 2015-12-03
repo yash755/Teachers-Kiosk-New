@@ -2,6 +2,9 @@ package com.example.yash.kiosk;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -20,12 +23,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TabHost;
 import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -54,7 +59,8 @@ public class MainActivity extends AppCompatActivity
 
 
         userlocalstore = new Userlocalstore(this);
-
+        User user = userlocalstore.getloggedInUser();
+        System.out.println(user.authkey + "Userlocalstore");
 
 
         // Creating The ViewPagerAdapter and Passing Fragment Manager, Titles fot the Tabs and Number Of Tabs.
@@ -67,7 +73,8 @@ public class MainActivity extends AppCompatActivity
         // Assiging the Sliding Tab Layout View
         tabs = (SlidingTabLayout) findViewById(R.id.tabs);
         tabs.setCustomTabView(R.layout.custom_tab_title, R.id.tabtext);
-        tabs.setDistributeEvenly(true); // To make the Tabs Fixed set this true, This makes the tabs Space Evenly in Available width
+        tabs.setDistributeEvenly(true);// To make the Tabs Fixed set this true, This makes the tabs Space Evenly in Available width
+
 
         // Setting Custom Color for the Scroll bar indicator of the Tab View
         tabs.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
@@ -77,38 +84,39 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
+
         // Setting the ViewPager For the SlidingTabsLayout
         tabs.setViewPager(pager);
 
-        Calendar calendar = Calendar.getInstance();
-        int day = calendar.get(Calendar.DAY_OF_WEEK);
 
 
+        String weekDay = "";
 
-      switch (day) {
-            case Calendar.MONDAY:
-                pager.setCurrentItem(1);
+        Calendar c = Calendar.getInstance();
+        int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
 
-            case Calendar.TUESDAY:
-                pager.setCurrentItem(2);
-
-           case Calendar.WEDNESDAY:
-               pager.setCurrentItem(3);
-
-           case Calendar.THURSDAY:
-
-
-           case Calendar.FRIDAY:
-               pager.setCurrentItem(5);
-
-           case Calendar.SATURDAY:
-               pager.setCurrentItem(6);
-
-          case Calendar.SUNDAY:
-              pager.setCurrentItem(1);
+        if (Calendar.MONDAY == dayOfWeek) {
+            pager.setCurrentItem(1);
+            weekDay = "MON";
+        } else if (Calendar.TUESDAY == dayOfWeek) {
+            pager.setCurrentItem(2);
+            weekDay = "TUE";
+        } else if (Calendar.WEDNESDAY == dayOfWeek) {
+            pager.setCurrentItem(3);
+            weekDay = "WED";
+        } else if (Calendar.THURSDAY == dayOfWeek) {
+            pager.setCurrentItem(4);
+            weekDay = "THU";
+        } else if (Calendar.FRIDAY == dayOfWeek) {
+            pager.setCurrentItem(5);
+            weekDay = "FRI";
+        } else if (Calendar.SATURDAY == dayOfWeek) {
+            pager.setCurrentItem(6);
+            weekDay = "SAT";
+        } else if (Calendar.SUNDAY == dayOfWeek) {
+            pager.setCurrentItem(7);
+            weekDay = "SUN";
         }
-
-
 
 
 
@@ -120,6 +128,12 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+
+
+
+
+
     }
 
 
@@ -151,14 +165,25 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            startActivity(new Intent(this, Settings.class));
             return true;
         }
 
         else if (id == R.id.logout){
-            userlocalstore.clearUserdata();
-            userlocalstore.setUserloggedIn(false);
-            startActivity(new Intent(this, Login.class));
-            return true;
+           DatabaseHelper teacher_db = new DatabaseHelper(this);
+            Cursor c= teacher_db.getTable();
+            if(c.getCount() == 0) {
+                teacher_db.removeAll();
+                userlocalstore.clearUserdata();
+                userlocalstore.setUserloggedIn(false);
+                startActivity(new Intent(this, Login.class));
+                return true;
+            }
+            else
+                Toast.makeText(getApplicationContext(), "You can't Logout as there some Attendance to be updated on server", Toast.LENGTH_LONG).show();
+
+            return false;
+
         }
 
         return super.onOptionsItemSelected(item);
@@ -203,7 +228,8 @@ public class MainActivity extends AppCompatActivity
 
             startActivity(new Intent(this,UploadAttendance.class));
 
-        } else if (id == R.id.nav_share) {
+        } else if (id == R.id.notification) {
+            startActivity(new Intent(this,Notification.class));
 
         } else if (id == R.id.nav_send) {
 

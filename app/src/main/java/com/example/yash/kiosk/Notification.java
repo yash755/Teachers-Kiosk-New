@@ -1,22 +1,22 @@
 package com.example.yash.kiosk;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,7 +24,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -32,149 +31,44 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 
-public class MarkAttendance extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class Notification extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener {
 
     Userlocalstore userlocalstore;
-    ListView list;
-    TextView ttv;
-    int count;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_mark_attendance);
+        setContentView(R.layout.activity_notification);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Select Class");
 
 
-        DatabaseHelper db = new DatabaseHelper(this);
+        ArrayList<String> notifylist = new ArrayList<>();
+        notifylist.add("B1B2B3");
+        notifylist.add("B4B5B6");
+
+        ArrayList<String> names = new ArrayList<>();
+        notifylist.add("");
+        notifylist.add("");
+
+        ListAdapter adpt = new Students(this,notifylist, names);
+        final ListView li = (ListView) findViewById(R.id.listll);
+        li.setAdapter(adpt);
+
+        AdapterView.OnItemClickListener listener = new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1, int position,
+                                    long arg3) {
+
+
+            }
+        };
+
+        li.setOnItemClickListener(listener);
+
+
         userlocalstore = new Userlocalstore(this);
-
-
-         String weekDay = "";
-
-        Calendar c = Calendar.getInstance();
-        int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
-
-        if (Calendar.MONDAY == dayOfWeek) {
-            weekDay = "MON";
-        } else if (Calendar.TUESDAY == dayOfWeek) {
-            weekDay = "TUE";
-        } else if (Calendar.WEDNESDAY == dayOfWeek) {
-            weekDay = "WED";
-        } else if (Calendar.THURSDAY == dayOfWeek) {
-            weekDay = "THU";
-        } else if (Calendar.FRIDAY == dayOfWeek) {
-            weekDay = "FRI";
-        } else if (Calendar.SATURDAY == dayOfWeek) {
-            weekDay = "SAT";
-        } else if (Calendar.SUNDAY == dayOfWeek) {
-            weekDay = "SUN";
-        }
-
-        Cursor cr = db.getTT(weekDay);
-        count = cr.getCount();
-
-        System.out.println("The count is" + cr.getCount() + weekDay);
-
-        cr.moveToFirst();
-        final ArrayList<String> classname = new ArrayList<>();
-        while (!cr.isAfterLast()) {
-            classname.add(cr.getString(cr.getColumnIndex("sub")));
-            cr.moveToNext();
-
-        }
-
-
-        cr.moveToFirst();
-        final ArrayList<String> time = new ArrayList<>();
-        while (!cr.isAfterLast()) {
-
-            if(cr.getString(cr.getColumnIndex("time")).equals("9") || cr.getString(cr.getColumnIndex("time")).equals("10") || cr.getString(cr.getColumnIndex("time")).equals("11"))
-            {
-                time.add(cr.getString(cr.getColumnIndex("time")) + "AM");
-                cr.moveToNext();
-            }
-
-            else if (cr.getString(cr.getColumnIndex("time")).equals("12"))
-            {
-                time.add(cr.getString(cr.getColumnIndex("time")) + "NOON");
-                cr.moveToNext();
-            }
-            else if (cr.getString(cr.getColumnIndex("time")).equals("13"))
-            {
-                time.add("1PM");
-                cr.moveToNext();
-            }
-            else if (cr.getString(cr.getColumnIndex("time")).equals("14"))
-            {
-                time.add("2PM");
-                cr.moveToNext();
-            }
-            else if (cr.getString(cr.getColumnIndex("time")).equals("15"))
-            {
-                time.add("3PM");
-                cr.moveToNext();
-            }
-            else if (cr.getString(cr.getColumnIndex("time")).equals("14"))
-            {
-                time.add("4PM");
-                cr.moveToNext();
-            }
-
-        }
-
-        cr.moveToFirst();
-        final ArrayList<String> venue = new ArrayList<>();
-        while (!cr.isAfterLast()) {
-            venue.add(cr.getString(cr.getColumnIndex("venue")));
-            cr.moveToNext();
-        }
-
-        cr.close();
-
-
-
-        if(count != 0) {
-            String t =  "Select from Today's Classes!!";
-            ttv = (TextView) findViewById(R.id.ttv);
-            ttv.setText(t);
-            ListAdapter adpt = new ClassList(this, classname, time, venue);
-            list = (ListView) findViewById(R.id.lt);
-            list.setAdapter(adpt);
-        }
-        else {
-
-            String t =  "No Classes Today!!";
-            ttv = (TextView) findViewById(R.id.ttv);
-            ttv.setText(t);
-
-        }
-
-        if(count!= 0) {
-
-            AdapterView.OnItemClickListener listener = new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> arg0, View arg1, int position,
-                                        long arg3) {
-
-                    Intent intent = new Intent(getApplicationContext(), StudentList.class);
-                    startActivity(intent);
-
-                }
-            };
-
-            list.setOnItemClickListener(listener);
-
-
-        }
-
-
-
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -185,9 +79,8 @@ public class MarkAttendance extends AppCompatActivity implements NavigationView.
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+
     }
-
-
 
 
     @Override
@@ -199,7 +92,6 @@ public class MarkAttendance extends AppCompatActivity implements NavigationView.
             super.onBackPressed();
         }
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -217,7 +109,6 @@ public class MarkAttendance extends AppCompatActivity implements NavigationView.
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            startActivity(new Intent(this, Settings.class));
             return true;
         }
 
@@ -240,6 +131,7 @@ public class MarkAttendance extends AppCompatActivity implements NavigationView.
 
         return super.onOptionsItemSelected(item);
     }
+
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -277,6 +169,7 @@ public class MarkAttendance extends AppCompatActivity implements NavigationView.
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
 
 
     public void fetch(){
@@ -331,10 +224,3 @@ public class MarkAttendance extends AppCompatActivity implements NavigationView.
 
 
 }
-
-
-
-
-
-
-

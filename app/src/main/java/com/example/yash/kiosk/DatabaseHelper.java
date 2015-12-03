@@ -33,12 +33,9 @@ public class DatabaseHelper  extends SQLiteOpenHelper{
     public static final String COL_11 = "time";
     public static final String COL_12 = "type";
     public static final String COL_13 = "venue";
-
-
-
-
-
-
+    public static final String TABLE_NAME3 = "vibration_status";
+    public static final String COL_14 = "vstatus";
+    public static final String COL_15 = "vvalue";
 
 
     public DatabaseHelper(Context context) {
@@ -52,6 +49,9 @@ public class DatabaseHelper  extends SQLiteOpenHelper{
         db.execSQL("create table " + TABLE_NAME + "(batch String ,eno String Primary Key,name String )");
         db.execSQL("create table " + TABLE_NAME2 + "(batch String ,day String,sub String,time String,type String,venue String )");
 
+        db.execSQL("create table " + TABLE_NAME3 + "(vstatus String ,vvalue String)");
+
+
     }
 
     @Override
@@ -61,6 +61,53 @@ public class DatabaseHelper  extends SQLiteOpenHelper{
         // onCreate(db);
 
     }
+
+
+    public void removeAll()
+    {
+        // db.delete(String tableName, String whereClause, String[] whereArgs);
+        // If whereClause is null, it will delete all rows.
+        SQLiteDatabase db = this.getWritableDatabase(); // helper is object extends SQLiteOpenHelper
+        db.delete(DatabaseHelper.TABLE_NAME, null, null);
+        db.delete(DatabaseHelper.TABLE_NAME2, null, null);
+        db.delete(DatabaseHelper.TABLE_NAME3,null,null);
+    }
+
+    public void vinsert(String vstatus,String vvalue){
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor cr1 = db.rawQuery("SELECT * FROM vibration_status", null);
+
+        System.out.println(cr1.getCount() + "My count");
+
+        if(cr1.getCount() == 0) {
+            System.out.println("Updating");
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(COL_14, vstatus);
+            contentValues.put(COL_15, vvalue);
+
+            db.insert(TABLE_NAME3, null, contentValues);
+        }
+        else{
+            System.out.println("Inserting");
+            ContentValues values = new ContentValues();
+            values.put(COL_14, vstatus);
+            db.update(TABLE_NAME3, values, COL_15+"="+ "'" + vvalue + "'", null);
+        }
+
+    }
+
+    public Cursor vfetch()
+    {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        System.out.println(db);
+        Cursor c = db.rawQuery("SELECT * FROM " + TABLE_NAME3 , null);
+        return c;
+    }
+
+
 
 
     public void insertdata(String batch, String enno, String name) {

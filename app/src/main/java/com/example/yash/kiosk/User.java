@@ -17,6 +17,18 @@ public class User {
         this.teachercode=teachercode;
     }
 
+    public User(String username,String password,String usertype,String authkey,String teachercode,String test,String test2)
+    {
+
+        this.error    = "";
+        this.success  = "";
+        this.authkey  = authkey;
+        this.usertype = usertype;
+        this.user     = username;
+        this.password = password;
+        this.teachercode=teachercode;
+    }
+
     public User(String error)
     {
         this.date     ="";
@@ -34,6 +46,7 @@ public class User {
     public User(String username,String password,String authkey,String success,String usertype,String teachercode)
     {
 
+        System.out.println("Authkey" + authkey);
         this.error    = null;
         this.success  = success;
         this.authkey  = authkey;
@@ -42,6 +55,8 @@ public class User {
         this.password = password;
         this.date     = "";
         this.teachercode=teachercode;
+
+        System.out.println("Authkey" + authkey);
     }
 
 

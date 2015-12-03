@@ -2,6 +2,7 @@ package com.example.yash.kiosk;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -111,7 +112,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
     private void authenticate(User user) {
 
         ServerRequest serverRequest = new ServerRequest(this);
-        serverRequest.fetchuserdatainbackground(user, new GetUserCallBack() {
+        serverRequest.fetchuserdatainbackground(getApplicationContext(),user, new GetUserCallBack() {
                     @Override
                     public void done(User returneduser) {
                         if (returneduser.error == null) {
@@ -200,6 +201,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
                 Log.e("SAMPLE", "error getting result " + i, e);
             }
         }
+        teacher_db.vinsert("1","vibration");
         Toast.makeText(getApplicationContext(), "TimeTable updated!!!", Toast.LENGTH_SHORT).show();
         // startActivity(new Intent(this, AttendanceListActivity.class));
     }

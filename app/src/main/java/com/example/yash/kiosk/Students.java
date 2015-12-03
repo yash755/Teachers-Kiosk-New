@@ -49,9 +49,9 @@ public class Students extends ArrayAdapter<String> {
             do{
                 String data=cr.getString(cr.getColumnIndex("status"));
                 if(data.equals("p"))
-                    customView.setBackgroundColor(Color.BLUE);
+                    customView.setBackgroundColor(Color.parseColor("#87CEFA"));
                 else
-                    customView.setBackgroundColor(Color.RED);
+                    customView.setBackgroundColor(Color.parseColor("#FFFFA654"));
             }while(cr.moveToNext());
 
 

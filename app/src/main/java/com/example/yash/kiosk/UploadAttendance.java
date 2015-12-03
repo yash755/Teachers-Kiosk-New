@@ -108,14 +108,25 @@ public class UploadAttendance extends AppCompatActivity implements NavigationVie
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            startActivity(new Intent(this, Settings.class));
             return true;
         }
 
         else if (id == R.id.logout){
-            userlocalstore.clearUserdata();
-            userlocalstore.setUserloggedIn(false);
-            startActivity(new Intent(this, Login.class));
-            return true;
+            DatabaseHelper teacher_db = new DatabaseHelper(this);
+            Cursor c= teacher_db.getTable();
+            if(c.getCount() == 0) {
+                teacher_db.removeAll();
+                userlocalstore.clearUserdata();
+                userlocalstore.setUserloggedIn(false);
+                startActivity(new Intent(this, Login.class));
+                return true;
+            }
+            else
+                Toast.makeText(getApplicationContext(), "You can't Logout as there some Attendance to be updated on server", Toast.LENGTH_LONG).show();
+
+            return false;
+
         }
 
         return super.onOptionsItemSelected(item);
@@ -146,7 +157,8 @@ public class UploadAttendance extends AppCompatActivity implements NavigationVie
 
             startActivity(new Intent(this,UploadAttendance.class));
 
-        } else if (id == R.id.nav_share) {
+        } else if (id == R.id.notification) {
+            startActivity(new Intent(this,Notification.class));
 
         } else if (id == R.id.nav_send) {
 
