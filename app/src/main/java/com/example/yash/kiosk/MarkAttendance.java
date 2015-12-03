@@ -135,6 +135,13 @@ public class MarkAttendance extends AppCompatActivity implements NavigationView.
             cr.moveToNext();
         }
 
+        cr.moveToFirst();
+        final ArrayList<String> type = new ArrayList<>();
+        while (!cr.isAfterLast()) {
+            type.add(cr.getString(cr.getColumnIndex("type")));
+            cr.moveToNext();
+        }
+
         cr.close();
 
 
@@ -143,7 +150,7 @@ public class MarkAttendance extends AppCompatActivity implements NavigationView.
             String t =  "Select from Today's Classes!!";
             ttv = (TextView) findViewById(R.id.ttv);
             ttv.setText(t);
-            ListAdapter adpt = new ClassList(this, classname, time, venue);
+            ListAdapter adpt = new ClassList(this, classname, time, venue,type);
             list = (ListView) findViewById(R.id.lt);
             list.setAdapter(adpt);
         }

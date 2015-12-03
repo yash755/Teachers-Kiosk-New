@@ -85,13 +85,21 @@ public class TimeTable extends Fragment {
             venue.add(cr.getString(cr.getColumnIndex("venue")));
             cr.moveToNext();
         }
+
+
+        cr.moveToFirst();
+        final ArrayList<String> type = new ArrayList<>();
+        while (!cr.isAfterLast()) {
+            type.add(cr.getString(cr.getColumnIndex("type")));
+            cr.moveToNext();
+        }
         cr.close();
 
 
 
         View v = inflater.inflate(R.layout.timetable,container,false);
 
-        ListAdapter adpt = new ClassList(getActivity(),classname,time,venue);
+        ListAdapter adpt = new ClassList(getActivity(),classname,time,venue,type);
         ListView lv = (ListView)v.findViewById(R.id.tt);
         lv.setAdapter(adpt);
 

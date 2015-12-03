@@ -6,14 +6,14 @@
     android:layout_width="120dp"
     android:layout_height="120dp"
     android:orientation="vertical"
-    android:paddingTop="70dp"
-    android:paddingLeft="5dp">
+    android:paddingLeft="5dp"
+    android:paddingBottom="5dp">
 
     <ImageView
         android:id="@+id/imageDisplay"
         android:paddingTop="10dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </LinearLayout>
 
@@ -35,7 +35,7 @@
 
     <TextView
         android:layout_width="match_parent"
-        android:paddingLeft="165dp"
+        android:paddingLeft="145dp"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Time"

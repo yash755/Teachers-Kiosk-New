@@ -17,12 +17,20 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textStyle="bold"
+        android:hint="I am here"
         android:textAlignment="center"
         android:id="@+id/ttv"
         android:layout_gravity="center_horizontal" />
 
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="2dp"
+        android:background="#c0c0c0"/>
+
+
+
     <ListView
-        android:layout_width="362dp"
-        android:layout_height="551dp"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
         android:id="@+id/lt" />
 </LinearLayout>

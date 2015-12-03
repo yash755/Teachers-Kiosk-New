@@ -23,19 +23,21 @@ public class ClassList extends ArrayAdapter<String> {
     ArrayList<String> classname = new ArrayList<>();
     ArrayList<String> time      = new ArrayList<>();
     ArrayList<String> venue     = new ArrayList<>();
+    ArrayList<String> type      = new ArrayList<>();
 
-    ClassList(Context context, ArrayList<String> name, ArrayList<String> name1,ArrayList<String> name2)
+    ClassList(Context context, ArrayList<String> name, ArrayList<String> name1,ArrayList<String> name2,ArrayList<String> name3)
     {
         super(context, R.layout.classlist, name);
         classname = name;
         time      = name1;
         venue     = name2;
+        type      = name3;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        Integer images[] = {R.drawable.pic1};
+        Integer images[] = {R.drawable.t,R.drawable.l};
 
         LayoutInflater inflater = LayoutInflater.from(getContext());
         View customView = null;
@@ -59,7 +61,10 @@ public class ClassList extends ArrayAdapter<String> {
             t1.setText(classname.get(position));
             t2.setText(time.get(position));
             t3.setText(venue.get(position));
-            imageView.setImageResource(images[0]);
+            if(type.get(position).equals("L") || type.get(position).equals("Lecture") )
+            imageView.setImageResource(images[1]);
+            else
+                imageView.setImageResource(images[0]);
 
         }
 
