@@ -36,6 +36,10 @@ public class DatabaseHelper  extends SQLiteOpenHelper{
     public static final String TABLE_NAME3 = "vibration_status";
     public static final String COL_14 = "vstatus";
     public static final String COL_15 = "vvalue";
+    public static final String TABLE_NAME4 = "tag_value";
+    public static final String COL_16 = "tags";
+    public static final String COL_17 = "tvalue";
+
 
 
     public DatabaseHelper(Context context) {
@@ -50,6 +54,8 @@ public class DatabaseHelper  extends SQLiteOpenHelper{
         db.execSQL("create table " + TABLE_NAME2 + "(batch String ,day String,sub String,time String,type String,venue String )");
 
         db.execSQL("create table " + TABLE_NAME3 + "(vstatus String ,vvalue String)");
+        db.execSQL("create table " + TABLE_NAME4 + "(tags String ,tvalue String)");
+
 
 
     }
@@ -70,7 +76,8 @@ public class DatabaseHelper  extends SQLiteOpenHelper{
         SQLiteDatabase db = this.getWritableDatabase(); // helper is object extends SQLiteOpenHelper
         db.delete(DatabaseHelper.TABLE_NAME, null, null);
         db.delete(DatabaseHelper.TABLE_NAME2, null, null);
-        db.delete(DatabaseHelper.TABLE_NAME3,null,null);
+        db.delete(DatabaseHelper.TABLE_NAME3, null, null);
+        db.delete(DatabaseHelper.TABLE_NAME4, null, null);
     }
 
     public void vinsert(String vstatus,String vvalue){
@@ -104,6 +111,14 @@ public class DatabaseHelper  extends SQLiteOpenHelper{
         SQLiteDatabase db = this.getWritableDatabase();
         System.out.println(db);
         Cursor c = db.rawQuery("SELECT * FROM " + TABLE_NAME3 , null);
+        return c;
+    }
+
+    public Cursor getbatch(){
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        System.out.println(db);
+        Cursor c = db.rawQuery("SELECT distinct batch FROM " + TABLE_NAME2 , null);
         return c;
     }
 
@@ -184,6 +199,46 @@ public class DatabaseHelper  extends SQLiteOpenHelper{
         return cr;
 
         //    return null;
+
+    }
+
+    public void settag(String tag,String value){
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+
+       Cursor cr1 = db.rawQuery("SELECT * FROM tag_value where tags = " + "'" + tag + "'" , null);
+
+        System.out.println(cr1.getCount() + "The count is:");
+
+        if(cr1.getCount() != 0){
+
+            ContentValues values = new ContentValues();
+            values.put(COL_17, value);
+            db.update(TABLE_NAME4, values, COL_16+"="+ "'" + tag + "'", null);
+
+
+
+        } else{
+
+            ContentValues contentValues = new ContentValues();
+
+            contentValues.put(COL_16,tag);
+            contentValues.put(COL_17,value);
+
+            db.insert(TABLE_NAME4, null, contentValues);
+
+
+        }
+
+    }
+
+    public Cursor gettag(){
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor c = db.rawQuery("SELECT * FROM " + TABLE_NAME4 , null);
+        return c;
 
     }
 

@@ -4,9 +4,14 @@
     android:orientation="horizontal">
 
     <TextView
-        android:layout_width="250dp"
-        android:layout_height="70dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:text="New Text"
-        android:id="@+id/tv5" />
+        android:id="@+id/tv5"
+        android:padding="30dp"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColorHighlight="@color/colorPrimary" />
 
 </LinearLayout>

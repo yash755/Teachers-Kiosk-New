@@ -114,6 +114,8 @@ public class UploadAttendance extends AppCompatActivity implements NavigationVie
 
         else if (id == R.id.logout){
             DatabaseHelper teacher_db = new DatabaseHelper(this);
+            Userlocalstore userlocalstore;
+            userlocalstore = new Userlocalstore(this);
             Cursor c= teacher_db.getTable();
             if(c.getCount() == 0) {
                 teacher_db.removeAll();
@@ -158,7 +160,7 @@ public class UploadAttendance extends AppCompatActivity implements NavigationVie
             startActivity(new Intent(this,UploadAttendance.class));
 
         } else if (id == R.id.notification) {
-            startActivity(new Intent(this,Notification.class));
+           startActivity(new Intent(this,Notification.class));
 
         } else if (id == R.id.nav_send) {
 

@@ -30,10 +30,10 @@
         android:id="@+id/message"
         android:layout_height="wrap_content"
         android:hint="Enter Message"
-        android:inputType="textMultiLine"
         android:lines="5"
         android:layout_width="fill_parent"
-        android:imeOptions="actionDone">
+        android:imeOptions="actionDone"
+        android:singleLine="true">
     </EditText>
 
     <TextView
