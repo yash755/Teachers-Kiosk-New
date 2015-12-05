@@ -93,12 +93,12 @@ public class Notification extends AppCompatActivity  implements NavigationView.O
         Cursor cr = db.getbatch();
 
 
-      //  cr.moveToFirst();
         final ArrayList<String> batch = new ArrayList<>();
         batch.add("B1B2B3");
         batch.add("B1");
         batch.add("B2");
-        batch.add("B4");
+        batch.add("GDG");
+
 
         final ArrayList<String> value = new ArrayList<>();
         value.add("0");
@@ -107,12 +107,6 @@ public class Notification extends AppCompatActivity  implements NavigationView.O
         value.add("0");
 
 
-     /*   while (!cr.isAfterLast()) {
-            batch.add(cr.getString(cr.getColumnIndex("batch")));
-            cr.moveToNext();
-        }
-
-        System.out.println("The Count:" + cr.getCount());
 /*
         for (int i=0;i<cr.getCount();i++){
 
@@ -305,8 +299,6 @@ public class Notification extends AppCompatActivity  implements NavigationView.O
 
                 } else if (id == R.id.notification) {
                     startActivity(new Intent(this, Notification.class));
-
-                } else if (id == R.id.nav_send) {
 
                 }
 

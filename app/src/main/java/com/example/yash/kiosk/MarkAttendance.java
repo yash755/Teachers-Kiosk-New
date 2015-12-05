@@ -278,8 +278,6 @@ public class MarkAttendance extends AppCompatActivity implements NavigationView.
         } else if (id == R.id.notification) {
            startActivity(new Intent(this,Notification.class));
 
-        } else if (id == R.id.nav_send) {
-
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

@@ -16,8 +16,7 @@
         <menu>
             <item android:id="@+id/notification" android:icon="@android:drawable/ic_menu_share"
                 android:title="Notification" />
-            <item android:id="@+id/nav_send" android:icon="@android:drawable/ic_menu_send"
-                android:title="Send" />
+
         </menu>
     </item>
 

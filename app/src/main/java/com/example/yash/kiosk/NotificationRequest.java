@@ -69,20 +69,9 @@ public class NotificationRequest {
             try {
 
                 JSONObject jsonobj = new JSONObject();
-
-
-                ArrayList<String> list = new ArrayList<String>();
-                list.add("B1B2B3");
-                list.add("B2");
-                list.add("B1");
-
                 jsonobj.put("msg", mess);
                 jsonobj.put("tags", new JSONArray(tags));
 
-
-                //list.add("matthew");
-
-                System.out.println("Response Send" + mess + list.toString());
 
 
                 StringEntity se = new StringEntity(jsonobj.toString());
@@ -114,6 +103,11 @@ public class NotificationRequest {
                     System.out.println(error + "Response");
                     // returneduser = new User("13103485","yash&9654195909","shdhddud","yes","s","SAN");
 
+                }
+                else
+                {
+                   // String error = (String) jsonobj1.get("success");
+                    returneduser = new User("Something Went Wrong!!!");
                 }
 
 
